@@ -1,0 +1,45 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserPayLoadForPost {
+  _id: ID!
+  fullName: String!
+  email: String!
+  age: Int!
+}
+
+type PostPayLoad {
+  _id: ID
+  title: String
+  content: String
+  user: UserPayLoadForPost!
+}
+
+type UserPayLoad {
+  _id: ID!
+  fullName: String!
+  email: String!
+  age: Int!
+  posts: [PostPayLoad!]
+}
+
+type Query {
+  getUsers: [UserPayLoad!]
+  getUserById(id: UserIdInput!): UserPayLoad
+  getPosts: [PostPayLoad!]
+}
+
+input UserIdInput {
+  id: ID!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): UserPayLoad!
+}
+
+input CreateUserInput {
+  fullName: String!
+  email: String!
+  age: Float!
+}
