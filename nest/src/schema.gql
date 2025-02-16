@@ -20,26 +20,71 @@ type UserPayLoad {
   _id: ID!
   fullName: String!
   email: String!
+  password: String!
   age: Int!
   posts: [PostPayLoad!]
+}
+
+type SignInPayLoad {
+  accessToken: String
 }
 
 type Query {
   getUsers: [UserPayLoad!]
   getUserById(id: UserIdInput!): UserPayLoad
   getPosts: [PostPayLoad!]
+  getPostById(id: PostIdInput!): PostPayLoad
+  getCurrentUser: UserPayLoad!
 }
 
 input UserIdInput {
   id: ID!
 }
 
+input PostIdInput {
+  id: ID!
+}
+
 type Mutation {
   createUser(createUserInput: CreateUserInput!): UserPayLoad!
+  updateUser(id: UserIdInput!, updateUserInput: UpdateUserInput!): UserPayLoad!
+  deleteUser(id: UserIdInput!): UserPayLoad!
+  createPost(createPostInput: CreatePostInput!): PostPayLoad
+  updatePost(id: PostIdInput!, updatePostInput: UpdatePostInput!): PostPayLoad
+  deletePost(id: PostIdInput!): PostPayLoad!
+  signUp(signUpInput: SignUpDto!): String
+  signIn(signInInput: SignInDto!): SignInPayLoad
 }
 
 input CreateUserInput {
   fullName: String!
   email: String!
   age: Float!
+}
+
+input UpdateUserInput {
+  fullName: String
+  email: String
+  age: String
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
+}
+
+input UpdatePostInput {
+  title: String
+  content: String
+}
+
+input SignUpDto {
+  fullName: String
+  email: String
+  password: String
+}
+
+input SignInDto {
+  email: String
+  password: String
 }

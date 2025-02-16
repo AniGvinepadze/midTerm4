@@ -13,6 +13,10 @@ export class UserPayLoad {
   @Field()
   email: string;
 
+  @Field()
+  password: string;
+
+
   @Field(() => Int)
   age: number;
 
