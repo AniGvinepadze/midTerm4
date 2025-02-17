@@ -37,4 +37,9 @@ export class UsersService {
       throw new BadRequestException('user could not be deleted');
     return deletedUser;
   }
+
+  async addPost(postId,userId){
+    const updateUser = await this.userModel.findByIdAndUpdate(userId,{$push:{posts:postId}},{new:true})
+    return updateUser
+  }
 }

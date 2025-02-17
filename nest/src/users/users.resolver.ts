@@ -37,5 +37,7 @@ export class UsersResolver {
  async deleteUser(@Args('id') { id }: UserIdInput){
      return this.usersService.deleteUser(id)
   }
+
+  
   
 }

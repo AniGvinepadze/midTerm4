@@ -1,18 +1,21 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Post } from './schema/post.schema';
-import { User } from 'src/users/schema/users.schema';
+
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectModel('post') private postModel: Model<Post>,
-    @InjectModel('user') private userModel: Model<User>,
+    private userService: UsersService
   ) {}
 
   async getAllPosts() {
@@ -26,8 +29,10 @@ export class PostsService {
     return post;
   }
 
-  createPost(req,createPostDto) {
-    return this.postModel.create(req,createPostDto);
+ async createPost(userId,createPostDto) {
+    const newPost = await this.postModel.create({...createPostDto,user:userId})
+    await this.userService.addPost(newPost._id,userId)
+    return newPost
   }
 
   async updatePost(id, updatePost) {

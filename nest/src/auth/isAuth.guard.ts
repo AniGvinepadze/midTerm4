@@ -13,20 +13,23 @@ export class IsAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req;
-    console.log(request);
-    const token = this.getTokenFromHeader(request.headers);
+    try {
+      const ctx = GqlExecutionContext.create(context);
+      const request = ctx.getContext().req;
+      console.log(request.headers, 'headers');
+      console.log(request.headers?.authorization, 'Authorization Header');
+      const token = this.getTokenFromHeader(request.headers);
+      console.log(token, 'token');
 
-    if (!token) throw new BadRequestException('wrong token is provided');
+      if (!token) throw new BadRequestException('wrong token is provided');
 
-    const payLoad = await this.jwtService.verify(token);
-    request.userId = payLoad.userId;
+      const payLoad = await this.jwtService.verify(token);
+      request.userId = payLoad.userId;
 
-    return true;
-    // } catch (error) {
-    //   throw new UnauthorizedException('permition denied');
-    // }
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException('permition denied');
+    }
   }
   getTokenFromHeader(headers) {
     const authorization = headers['authorization'];

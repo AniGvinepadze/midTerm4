@@ -6,15 +6,20 @@ import { IsAuthGuard } from '../auth/isAuth.guard';
 import { PostIdInput } from './dto/post-id.input';
 import { CreatePostInput } from './dto/post.input';
 import { UpdatePostInput } from './dto/post.update';
+import { UsersService } from 'src/users/users.service';
 
 @Resolver()
 @UseGuards(IsAuthGuard)
 export class PostResolver {
-  constructor(private postService: PostsService) {}
+  constructor(
+    private postService: PostsService,
+    private userService:UsersService
+
+  ) {}
 
   @Query(() => [PostPayLoad], { nullable: true })
   // @UseGuards(IsAuthGuard)
-  getPosts(@Context('req') req) {
+  getPosts() {
     // console.log(req.userId, 'useriID');
     return this.postService.getAllPosts();
   }
@@ -25,9 +30,9 @@ export class PostResolver {
   }
 
   @Mutation(() => PostPayLoad, { nullable: true })
-  createPost(@Context('req') req,@Args('createPostInput') postInput: CreatePostInput) {
+  createPost(@Context('req') userId,@Args('createPostInput') postInput: CreatePostInput) {
     
-    return this.postService.createPost(req,postInput);
+    return this.postService.createPost(userId,postInput);
   }
 
   @Mutation(() => PostPayLoad, { nullable: true })
